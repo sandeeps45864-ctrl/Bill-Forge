@@ -74,6 +74,13 @@ router.post("/login", async (req, res) => {
     });
   }
 
+  if (user.validTill && user.validTill < new Date()) {
+  return res.json({
+    success: false,
+    message: "Subscription Expired"
+  });
+}
+
 user.lastLogin = new Date();
 
 await user.save();
