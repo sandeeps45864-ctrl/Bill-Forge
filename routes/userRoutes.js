@@ -43,6 +43,23 @@ router.post("/login", async (req, res) => {
     });
   }
 
+  if (user.rejected) {
+    return res.json({
+      success: false,
+      message: "Account Rejected"
+    });
+  }
+
+  if (user.validTill && user.validTill < new Date()) {
+    return res.json({
+      success: false,
+      message: "Subscription Expired"
+    });
+  }
+
+  user.lastLogin = new Date();
+  await user.save();
+
   res.json({
     success: true,
     message: "Login Success"
@@ -51,55 +68,3 @@ router.post("/login", async (req, res) => {
 });
 
 module.exports = router;
-
-
-router.post("/login", async (req, res) => {
-
-  const user = await User.findOne({
-    email: req.body.email
-  });
-
-   console.log(user);
-  if (!user) {
-    return res.json({
-      success: false,
-      message: "User Not Found"
-    });
-  }
-
-  if (!user.approved) {
-    return res.json({
-      success: false,
-      message: "Wait For Admin Approval"
-    });
-  }
-
-  if (user.validTill && user.validTill < new Date()) {
-  return res.json({
-    success: false,
-    message: "Subscription Expired"
-  });
-}
-
-user.lastLogin = new Date();
-
-await user.save();
-
-    
-  res.json({
-    success: true,
-    message: "Login Success"
-  });
-
-});
-
-
-
-
-
-
-
-
-
-
-
