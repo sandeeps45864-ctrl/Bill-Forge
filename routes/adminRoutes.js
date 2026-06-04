@@ -3,6 +3,7 @@ const router = express.Router();
 
 const User = require("../models/User");
 
+// All Users
 router.get("/users", async (req, res) => {
 
   const users = await User.find().sort({
@@ -16,20 +17,31 @@ router.get("/users", async (req, res) => {
 
 });
 
-module.exports = router;
-
+// Approve User With Validity
 router.put("/approve/:id", async (req, res) => {
+
+  const days = req.body.days || 30;
+
+  const validTill = new Date();
+
+  validTill.setDate(
+    validTill.getDate() + days
+  );
 
   await User.findByIdAndUpdate(
     req.params.id,
     {
-      approved: true
+      approved: true,
+      rejected: false,
+      validTill
     }
   );
 
   res.json({
     success: true,
-    message: "User Approved"
+    message: `User Approved For ${days} Days`
   });
 
 });
+
+module.exports = router;
