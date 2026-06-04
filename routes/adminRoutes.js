@@ -103,4 +103,16 @@ router.put("/activate365/:id", async (req, res) => {
 
 });
 
+// Delete User
+router.delete("/delete/:id", async (req, res) => {
+
+  await User.findByIdAndDelete(req.params.id);
+
+  res.json({
+    success: true,
+    message: "User Deleted"
+  });
+
+});
+
 module.exports = router;
