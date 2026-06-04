@@ -44,4 +44,22 @@ router.put("/approve/:id", async (req, res) => {
 
 });
 
+
+router.put("/reject/:id", async (req, res) => {
+
+  await User.findByIdAndUpdate(
+    req.params.id,
+    {
+      rejected: true,
+      approved: false
+    }
+  );
+
+  res.json({
+    success: true,
+    message: "User Rejected"
+  });
+
+});
+
 module.exports = router;
