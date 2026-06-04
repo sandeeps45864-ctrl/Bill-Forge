@@ -31,7 +31,12 @@ const userSchema = new mongoose.Schema({
   validTill: {
     type: Date,
     default: null
-  }
+  },
+
+  deviceId: {
+  type: String,
+  default: null
+},
 
 });
 
