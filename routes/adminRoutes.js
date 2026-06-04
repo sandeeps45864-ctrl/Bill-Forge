@@ -17,3 +17,19 @@ router.get("/users", async (req, res) => {
 });
 
 module.exports = router;
+
+router.put("/approve/:id", async (req, res) => {
+
+  await User.findByIdAndUpdate(
+    req.params.id,
+    {
+      approved: true
+    }
+  );
+
+  res.json({
+    success: true,
+    message: "User Approved"
+  });
+
+});
