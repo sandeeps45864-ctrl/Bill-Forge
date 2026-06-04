@@ -17,16 +17,29 @@ router.get("/users", async (req, res) => {
 
 });
 
-// Approve User With Validity
-router.put("/approve/:id", async (req, res) => {
+// Reject User
+router.put("/reject/:id", async (req, res) => {
 
-  const days = req.body.days || 30;
+  await User.findByIdAndUpdate(
+    req.params.id,
+    {
+      rejected: true,
+      approved: false
+    }
+  );
+
+  res.json({
+    success: true
+  });
+
+});
+
+// 30 Days
+router.put("/activate30/:id", async (req, res) => {
 
   const validTill = new Date();
 
-  validTill.setDate(
-    validTill.getDate() + days
-  );
+  validTill.setDate(validTill.getDate() + 30);
 
   await User.findByIdAndUpdate(
     req.params.id,
@@ -39,49 +52,13 @@ router.put("/approve/:id", async (req, res) => {
 
   res.json({
     success: true,
-    message: `User Approved For ${days} Days`
-  });
-
-});
-
-
-router.put("/reject/:id", async (req, res) => {
-
-  await User.findByIdAndUpdate(
-    req.params.id,
-    {
-      rejected: true,
-      approved: false
-    }
-  );
-
-  res.json({
-    success: true,
-    message: "User Rejected"
-  });
-
-});
-
-router.put("/activate30/:id", async (req, res) => {
-
-  const validTill = new Date();
-
-  validTill.setDate(validTill.getDate() + 30);
-
-  await User.findByIdAndUpdate(
-    req.params.id,
-    {
-      approved: true,
-      validTill
-    }
-  );
-
-  res.json({
-    success: true,
     message: "30 Days Activated"
   });
 
-  router.put("/activate90/:id", async (req, res) => {
+});
+
+// 90 Days
+router.put("/activate90/:id", async (req, res) => {
 
   const validTill = new Date();
 
@@ -91,6 +68,7 @@ router.put("/activate30/:id", async (req, res) => {
     req.params.id,
     {
       approved: true,
+      rejected: false,
       validTill
     }
   );
@@ -102,6 +80,7 @@ router.put("/activate30/:id", async (req, res) => {
 
 });
 
+// 365 Days
 router.put("/activate365/:id", async (req, res) => {
 
   const validTill = new Date();
@@ -112,6 +91,7 @@ router.put("/activate365/:id", async (req, res) => {
     req.params.id,
     {
       approved: true,
+      rejected: false,
       validTill
     }
   );
@@ -120,8 +100,6 @@ router.put("/activate365/:id", async (req, res) => {
     success: true,
     message: "365 Days Activated"
   });
-
-});
 
 });
 
