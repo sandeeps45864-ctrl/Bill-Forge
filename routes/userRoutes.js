@@ -74,6 +74,11 @@ router.post("/login", async (req, res) => {
     });
   }
 
+user.lastLogin = new Date();
+
+await user.save();
+
+    
   res.json({
     success: true,
     message: "Login Success"
