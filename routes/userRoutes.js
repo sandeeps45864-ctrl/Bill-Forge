@@ -42,19 +42,7 @@ router.post("/login", async (req, res) => {
       message: "Wait For Admin Approval"
     });
   }
-
-  if (!user.deviceId) {
-
-  user.deviceId = req.body.deviceId;
-
-} else if (user.deviceId !== req.body.deviceId) {
-
-  return res.json({
-    success: false,
-    message: "This Account Is Already Active On Another Device"
-  });
-
-}
+   user.deviceId = req.body.deviceId;
 
   if (user.rejected) {
     return res.json({
